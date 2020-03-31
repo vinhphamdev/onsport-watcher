@@ -6,6 +6,8 @@ class TransactionRepository {
     createTable(){
 
     const sql = `CREATE TABLE IF NOT EXISTS transactions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        blockNumber TEXT,
         transactionHash TEXT,
         sender TEXT,
         receiver TEXT,
@@ -15,10 +17,10 @@ class TransactionRepository {
 
     }
 
-    create(transactionHash, sender, receiver, value, executed){
+    create(blockNumber, transactionHash, sender, receiver, value, executed){
         return this.dao.runquery(
-            'INSERT INTO transactions (transactionHash, sender, receiver, value, executed) VALUES (?,?,?,?,?)',
-            [transactionHash, sender, receiver, value, executed])
+            'INSERT INTO transactions (blockNumber, transactionHash, sender, receiver, value, executed) VALUES (?,?,?,?,?,?)',
+            [blockNumber, transactionHash, sender, receiver, value, executed])
     }
 
     update(){
@@ -27,6 +29,11 @@ class TransactionRepository {
 
     getAllTransaction(){
         return this.dao.all(`SELECT * FROM transactions`)
+    }
+
+    getLastTransaction(){
+        const sql = `SELECT * FROM transactions ORDER BY id DESC LIMIT 1`
+        return this.dao.get(sql);
     }
 }
 

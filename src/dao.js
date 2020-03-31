@@ -39,6 +39,20 @@ class AppDAO {
             })
         })
     }
+
+    get(sql, params = []) {
+        return new Promise((resolve, reject) => {
+          this.db.get(sql, params, (err, result) => {
+            if (err) {
+              console.log('Error running sql: ' + sql)
+              console.log(err)
+              reject(err)
+            } else {
+              resolve(result)
+            }
+          })
+        })
+      }
 }
 
 module.exports = AppDAO
